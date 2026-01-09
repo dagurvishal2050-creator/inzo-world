@@ -1,0 +1,12 @@
+body {
+  margin: 0;
+  background: #0b0b0b;
+  color: #ffffff;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+}
+
+.admin-bg {
+  background: #0f0f0f;
+  min-height: 100vh;
+  padding: 20px;
+}

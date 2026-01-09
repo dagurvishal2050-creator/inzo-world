@@ -9,8 +9,8 @@ const supabase = createClient(
 );
 
 export default function HomePage() {
-  const [videos, setVideos] = useState<any[]>([]);
-  const [timers, setTimers] = useState<{ [key: string]: number }>({});
+  const [videos, setVideos] = useState([]);
+  const [timers, setTimers] = useState({});
 
   useEffect(() => {
     async function load() {
@@ -21,19 +21,19 @@ export default function HomePage() {
 
       if (data) {
         setVideos(data);
-        const initialTimers: any = {};
-        data.forEach((v) => (initialTimers[v.id] = 5));
-        setTimers(initialTimers);
+        const t = {};
+        data.forEach(v => (t[v.id] = 5));
+        setTimers(t);
       }
     }
     load();
   }, []);
 
-  function startTimer(id: string) {
+  function startTimer(id) {
     if (timers[id] === 0) return;
 
     const interval = setInterval(() => {
-      setTimers((prev) => {
+      setTimers(prev => {
         if (prev[id] <= 1) {
           clearInterval(interval);
           return { ...prev, [id]: 0 };
@@ -44,25 +44,20 @@ export default function HomePage() {
   }
 
   return (
-    <div style={{ padding: 20, maxWidth: 1200, margin: "auto" }}>
-      <h1 style={{ marginBottom: 30 }}>Inzo World</h1>
+    <div style={{ maxWidth: 1200, margin: "auto", padding: 20 }}>
+      <h1>Inzo World</h1>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-          gap: 20,
-        }}
-      >
-        {videos.map((v) => (
-          <div
-            key={v.id}
-            style={{
-              background: "#151515",
-              borderRadius: 12,
-              overflow: "hidden",
-            }}
-          >
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+        gap: 20
+      }}>
+        {videos.map(v => (
+          <div key={v.id} style={{
+            background: "#151515",
+            borderRadius: 12,
+            overflow: "hidden"
+          }}>
             <img src={v.banner_url} style={{ width: "100%" }} />
 
             <video
@@ -80,18 +75,15 @@ export default function HomePage() {
               <p style={{ opacity: 0.7 }}>{v.description}</p>
 
               {timers[v.id] > 0 ? (
-                <button
-                  disabled
-                  style={{
-                    width: "100%",
-                    padding: 10,
-                    background: "#333",
-                    color: "#aaa",
-                    borderRadius: 8,
-                    border: "none",
-                  }}
-                >
-                  ⏳ Wait {timers[v.id]} sec
+                <button disabled style={{
+                  width: "100%",
+                  padding: 10,
+                  background: "#333",
+                  color: "#aaa",
+                  border: "none",
+                  borderRadius: 8
+                }}>
+                  Wait {timers[v.id]} sec
                 </button>
               ) : (
                 <a
@@ -100,15 +92,14 @@ export default function HomePage() {
                   style={{
                     display: "block",
                     textAlign: "center",
-                    marginTop: 10,
                     padding: 10,
                     background: "#2563eb",
-                    borderRadius: 8,
                     color: "#fff",
-                    textDecoration: "none",
+                    borderRadius: 8,
+                    textDecoration: "none"
                   }}
                 >
-                  ⬇ Download
+                  Download
                 </a>
               )}
             </div>
