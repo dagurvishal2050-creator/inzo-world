@@ -1,101 +1,94 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { createClient } from "@supabase/supabase-js";
 
-export default function NetflixLikeApp() {
-  const [open, setOpen] = useState(false);
-  const [timer, setTimer] = useState(null);
-  const [loading, setLoading] = useState(true);
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
 
-  useEffect(() => {
-    setTimeout(() => setLoading(false), 1500); // skeleton
-  }, []);
+export default function AdminUpload() {
+  const [v, setV] = useState({
+    title: "",
+    banner: "",
+    preview: "",
+    video: "",
+    description: "",
+  });
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (timer === 0) {
-      navigator.vibrate?.(200);
-      window.location.href =
-        "https://www.w3schools.com/html/mov_bbb.mp4";
+  const upload = async () => {
+    if (!v.title || !v.banner || !v.preview || !v.video) {
+      alert("All fields required");
+      return;
     }
-    if (timer > 0) {
-      setTimeout(() => setTimer(timer - 1), 1000);
-    }
-  }, [timer]);
 
-  function openModal() {
-    new Audio("/sounds/tudum.mp3").play();
-    setOpen(true);
-  }
+    setLoading(true);
+
+    const { error } = await supabase.from("videos").insert([
+      {
+        title: v.title,
+        banner_url: v.banner,
+        preview_url: v.preview,
+        video_url: v.video,
+        description: v.description,
+      },
+    ]);
+
+    setLoading(false);
+
+    if (error) {
+      alert("Upload failed");
+    } else {
+      alert("Uploaded ✅");
+      setV({
+        title: "",
+        banner: "",
+        preview: "",
+        video: "",
+        description: "",
+      });
+    }
+  };
 
   return (
-    <div className="container">
-      {/* HERO */}
-      <div className="hero" onClick={openModal}>
-        <video
-          src="https://www.w3schools.com/html/mov_bbb.mp4"
-          autoPlay
-          muted
-          loop
-        />
-        <div className="hero-overlay">
-          <h1>Inzo World</h1>
-          <p>Tap to explore</p>
-        </div>
-      </div>
+    <div className="admin-upload">
+      <h2>Upload Video</h2>
 
-      {/* ROWS */}
-      {["Trending", "New", "Recommended"].map((row) => (
-        <div key={row}>
-          <h2 className="row-title">{row}</h2>
-          <div className="row">
-            {[1, 2, 3, 4, 5].map((i) =>
-              loading ? (
-                <div key={i} className="skeleton"></div>
-              ) : (
-                <div key={i} className="thumb"></div>
-              )
-            )}
-          </div>
-        </div>
-      ))}
+      <input
+        placeholder="Title"
+        value={v.title}
+        onChange={e => setV({ ...v, title: e.target.value })}
+      />
 
-      {/* MODAL */}
-      {open && (
-        <div className="modal">
-          <div className="modal-card">
-            <video
-              src="https://www.w3schools.com/html/mov_bbb.mp4"
-              autoPlay
-              muted
-              loop
-            />
+      <input
+        placeholder="Banner Image URL"
+        value={v.banner}
+        onChange={e => setV({ ...v, banner: e.target.value })}
+      />
 
-            <div className="modal-info">
-              <h2>Movie Title</h2>
-              <p>
-                Full cinematic description. Netflix-style premium experience.
-              </p>
+      <input
+        placeholder="5 sec Preview Video URL"
+        value={v.preview}
+        onChange={e => setV({ ...v, preview: e.target.value })}
+      />
 
-              <button
-                className="download-btn"
-                onClick={() => setTimer(5)}
-              >
-                ⬇ Download
-              </button>
+      <input
+        placeholder="Download Video URL"
+        value={v.video}
+        onChange={e => setV({ ...v, video: e.target.value })}
+      />
 
-              {timer !== null && (
-                <div className="timer">
-                  Download starts in {timer}
-                </div>
-              )}
+      <textarea
+        placeholder="Description"
+        value={v.description}
+        onChange={e => setV({ ...v, description: e.target.value })}
+      />
 
-              <button className="close" onClick={() => setOpen(false)}>
-                ✕
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <button onClick={upload} disabled={loading}>
+        {loading ? "Uploading…" : "UPLOAD"}
+      </button>
     </div>
   );
 }
