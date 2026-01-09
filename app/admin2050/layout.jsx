@@ -1,3 +1,5 @@
+import "../../globals.css";
+
 export default function AdminLayout({ children }) {
-  return <div className="admin-bg">{children}</div>;
+  return <div className="netflix-bg">{children}</div>;
 }
