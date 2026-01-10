@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Refer & Earn</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #1a130f, #000);
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    .menu-wrapper{position:fixed;top:18px;right:18px;z-index:9999}
+    .menu-btn{font-size:26px;cursor:pointer;padding:6px 10px;border-radius:8px;background:rgba(255,255,255,.08)}
+    .menu-dropdown{display:none;position:absolute;right:0;margin-top:10px;background:#111;border-radius:10px;overflow:hidden}
+    .menu-dropdown a{display:block;padding:12px 16px;color:#fff;text-decoration:none;font-size:14px}
+    .menu-dropdown a:hover{background:rgba(255,255,255,.08)}
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 60px 20px 90px;
+    }
+
+    /* HERO IMAGE */
+    .hero-image {
+      max-width: 900px;
+      margin: 0 auto 50px;
+      border-radius: 22px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 30px 70px rgba(0,0,0,0.85);
+    }
+
+    .hero-image img {
+      width: 100%;
+      display: block;
+      filter: brightness(0.95);
+    }
+
+    .hero-image::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.15)),
+        radial-gradient(circle at center, rgba(0,0,0,0.25), rgba(0,0,0,0.95));
+    }
+
+    .hero {
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.08);
+      padding: 7px 18px;
+      border-radius: 50px;
+      font-size: 13px;
+      color: #bbb;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: 42px;
+      font-weight: 700;
+      margin-bottom: 18px;
+      line-height: 1.2;
+    }
+
+    h1 span {
+      background: linear-gradient(90deg, #ffd166, #ff9f1c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      font-size: 17px;
+      color: #d0d0d0;
+      max-width: 720px;
+      margin: 0 auto 40px;
+      line-height: 1.6;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      padding: 16px 44px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a130f;
+      background: linear-gradient(90deg, #ffd166, #ff9f1c);
+      border-radius: 14px;
+      text-decoration: none;
+      box-shadow: 0 15px 45px rgba(255,159,28,0.5);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 22px 60px rgba(255,159,28,0.7);
+    }
+
+    .features {
+      margin-top: 90px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+    }
+
+    .feature {
+      background: rgba(255,255,255,0.05);
+      padding: 28px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(8px);
+    }
+
+    .feature h3 {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .feature p {
+      font-size: 14px;
+      color: #bbb;
+      line-height: 1.5;
+    }
+
+    .disclaimer {
+      margin-top: 80px;
+      font-size: 12px;
+      color: #8f8f8f;
+      text-align: center;
+      line-height: 1.6;
+      max-width: 850px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 32px;
+      }
+
+      .subtitle {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="menu-wrapper">
+  <div class="menu-btn" onclick="toggleMenu()">⋮</div>
+  <div class="menu-dropdown" id="menu">
+    <a href="movies.html">Movies</a>
+    <a href="money.html">Money</a>
+    <a href="refer.html">Refer</a>
+  </div>
+</div>
+
+  <div class="container">
+
+    <!-- HERO IMAGE -->
+    <div class="hero-image">
+      <img src="refer-hero.jpg" alt="Refer & Earn">
+    </div>
+
+    <!-- HERO TEXT -->
+    <div class="hero">
+      <div class="badge">Referral Hub</div>
+
+      <h1>Refer & <span>Earn Rewards</span></h1>
+
+      <p class="subtitle">
+        Share the platform with your network and unlock rewards.
+        A simple, transparent referral system designed to benefit
+        everyone involved — no complexity, no confusion.
+      </p>
+
+      <a href="https://app-8pbfuv55sx6p.appmedo.com/login" class="cta-btn">Refer Now</a>
+    </div>
+
+    <!-- FEATURES -->
+    <div class="features">
+      <div class="feature">
+        <h3>🔗 Simple Sharing</h3>
+        <p>Get your unique referral link and share it anywhere.</p>
+      </div>
+
+      <div class="feature">
+        <h3>🎁 Earn Rewards</h3>
+        <p>Receive bonuses and benefits for successful referrals.</p>
+      </div>
+
+      <div class="feature">
+        <h3>✅ Fair & Transparent</h3>
+        <p>Every referral is tracked clearly and securely.</p>
+      </div>
+    </div>
+
+    <!-- DISCLAIMER -->
+    <div class="disclaimer">
+      Disclaimer: Referral rewards are subject to verification
+      and program rules. Any misuse or abnormal activity may
+      result in disqualification.
+    </div>
+
+  </div>
+
+  <script>
+function toggleMenu(){
+  const m=document.getElementById("menu");
+  m.style.display=m.style.display==="block"?"none":"block";
+}
+document.addEventListener("click",e=>{
+  if(!e.target.closest(".menu-wrapper")){
+    document.getElementById("menu").style.display="none";
+  }
+});
+</script>
+
+</body>
+</html>
