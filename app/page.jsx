@@ -1,6 +1,6 @@
 "use client";
-
 export const dynamic = "force-dynamic";
+
 import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 
@@ -14,10 +14,17 @@ import EmptyState from "./components/EmptyState";
 import { playSound } from "./utils/sound";
 import { sortLatest } from "./utils/sort";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
+/* ===============================
+   SUPABASE — BROWSER ONLY
+================================ */
+let supabase = null;
+
+if (typeof window !== "undefined") {
+  supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  );
+}
 
 export default function Home() {
   const [videos, setVideos] = useState([]);
@@ -28,10 +35,15 @@ export default function Home() {
   useEffect(() => {
     playSound("/sounds/intro.mp3");
 
-    supabase.from("videos").select("*").then(({ data }) => {
-      setVideos(sortLatest(data || []));
-      setLoading(false);
-    });
+    if (!supabase) return;
+
+    supabase
+      .from("videos")
+      .select("*")
+      .then(({ data }) => {
+        setVideos(sortLatest(data || []));
+        setLoading(false);
+      });
 
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/sw.js");

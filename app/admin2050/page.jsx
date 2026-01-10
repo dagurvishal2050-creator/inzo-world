@@ -1,8 +1,12 @@
 "use client";
 export const dynamic = "force-dynamic";
+
 import { useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 
+/* ===============================
+   SUPABASE — BROWSER ONLY
+================================ */
 let supabase = null;
 
 if (typeof window !== "undefined") {
@@ -23,6 +27,8 @@ export default function AdminUpload() {
   const [loading, setLoading] = useState(false);
 
   const upload = async () => {
+    if (!supabase) return;
+
     if (!v.title || !v.banner || !v.preview || !v.video) {
       alert("All fields required");
       return;
