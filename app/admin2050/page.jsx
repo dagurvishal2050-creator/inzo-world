@@ -1,22 +1,14 @@
 "use client";
 export const dynamic = "force-dynamic";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 
-/* ===============================
-   SUPABASE — BROWSER ONLY
-================================ */
-let supabase = null;
-
-if (typeof window !== "undefined") {
-  supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  );
-}
-
 export default function AdminUpload() {
+  const [supabase, setSupabase] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [ready, setReady] = useState(false);
+
   const [v, setV] = useState({
     title: "",
     banner: "",
@@ -24,10 +16,26 @@ export default function AdminUpload() {
     video: "",
     description: "",
   });
-  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!url || !key) {
+      alert("Supabase env missing");
+      return;
+    }
+
+    const client = createClient(url, key);
+    setSupabase(client);
+    setReady(true);
+  }, []);
 
   const upload = async () => {
-    if (!supabase) return;
+    if (!supabase || !ready) {
+      alert("Admin not ready");
+      return;
+    }
 
     if (!v.title || !v.banner || !v.preview || !v.video) {
       alert("All fields required");
@@ -61,6 +69,14 @@ export default function AdminUpload() {
       });
     }
   };
+
+  if (!ready) {
+    return (
+      <div className="admin-upload">
+        <h3>Loading admin…</h3>
+      </div>
+    );
+  }
 
   return (
     <div className="admin-upload">

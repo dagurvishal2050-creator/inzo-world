@@ -14,19 +14,8 @@ import EmptyState from "./components/EmptyState";
 import { playSound } from "./utils/sound";
 import { sortLatest } from "./utils/sort";
 
-/* ===============================
-   SUPABASE — BROWSER ONLY
-================================ */
-let supabase = null;
-
-if (typeof window !== "undefined") {
-  supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  );
-}
-
 export default function Home() {
+  const [supabase, setSupabase] = useState(null);
   const [videos, setVideos] = useState([]);
   const [open, setOpen] = useState(null);
   const [q, setQ] = useState("");
@@ -35,12 +24,27 @@ export default function Home() {
   useEffect(() => {
     playSound("/sounds/intro.mp3");
 
-    if (!supabase) return;
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-    supabase
+    if (!url || !key) {
+      console.error("Supabase env missing");
+      setLoading(false);
+      return;
+    }
+
+    const client = createClient(url, key);
+    setSupabase(client);
+
+    client
       .from("videos")
       .select("*")
-      .then(({ data }) => {
+      .then(({ data, error }) => {
+        if (error) {
+          console.error(error);
+          setLoading(false);
+          return;
+        }
         setVideos(sortLatest(data || []));
         setLoading(false);
       });
